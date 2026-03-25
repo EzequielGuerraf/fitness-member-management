@@ -1,16 +1,26 @@
-import { PrismaClient } from "@prisma/client";
+import { BillingPeriod, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Seed placeholder: add initial data here when models are ready.");
+  await prisma.membershipPlan.upsert({
+    where: { name: "Standard Monthly" },
+    update: {
+      description: "Recurring monthly membership plan.",
+      priceCents: 4999,
+      billingPeriod: BillingPeriod.MONTHLY,
+      isActive: true
+    },
+    create: {
+      name: "Standard Monthly",
+      description: "Recurring monthly membership plan.",
+      priceCents: 4999,
+      billingPeriod: BillingPeriod.MONTHLY,
+      isActive: true
+    }
+  });
 
-  // Example:
-  // await prisma.member.create({
-  //   data: {
-  //     name: "Demo Member"
-  //   }
-  // });
+  console.log("Seed completed: ensured at least one active membership plan.");
 }
 
 main()

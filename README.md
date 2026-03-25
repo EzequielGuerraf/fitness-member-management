@@ -1,113 +1,162 @@
 # fitness-member-management
 
-Full-stack project skeleton for a coding challenge using React, Vite, Express, TypeScript, PostgreSQL, and Prisma.
+Full-stack coding challenge workspace using React, Vite, Express, TypeScript, PostgreSQL, and Prisma.
 
-## Project structure
+## Backend foundation
+
+### Folder structure
 
 ```text
-fitness-member-management/
-  backend/
-  frontend/
-  docker-compose.yml
-  README.md
+backend/
+  prisma/
+    migrations/
+    schema.prisma
+    seed.ts
+  src/
+    app.ts
+    server.ts
+    config/
+    lib/
+    middleware/
+    modules/
+      members/
+      plans/
+      memberships/
+      checkins/
 ```
 
-## Prerequisites
+### Backend features in this step
 
-- Node.js 22+
-- npm 11+
-- Docker Desktop or Docker Engine with Docker Compose
+- Prisma schema with PostgreSQL tables for members, membership plans, memberships, and check-ins
+- Seed data for at least one active membership plan
+- Express + TypeScript API with Zod request validation
+- Thin controllers, service-layer business rules, and centralized error handling
+- Transaction-safe membership assignment with a DB-level partial unique index for active memberships
+- Minimal backend test covering the one-active-membership rule
 
-## Setup
+### Backend setup
 
-### 1. Start PostgreSQL with Docker Compose
+1. Start PostgreSQL.
 
 ```bash
 docker compose up -d
 ```
 
-### 2. Install backend dependencies
+2. Install backend dependencies.
 
 ```bash
 cd backend
 npm install
 ```
 
-### 3. Generate the Prisma client
+3. Create the backend environment file.
+
+```bash
+copy .env.example .env
+```
+
+If you are not on Windows, create `backend/.env` with:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5433/fitness_app?schema=public"
+PORT=3001
+NODE_ENV=development
+```
+
+4. Generate Prisma client and apply the checked-in migration.
 
 ```bash
 npm run prisma:generate
+npm run prisma:migrate:deploy
 ```
 
-### 4. Run Prisma migrations
-
-```bash
-npm run prisma:migrate -- --name init
-```
-
-Note: the Prisma schema currently contains only datasource and generator configuration. Add models before creating the first real migration.
-
-### 5. Run the seed script
+5. Seed the database.
 
 ```bash
 npm run prisma:seed
 ```
 
-The seed is currently a placeholder and is ready to be expanded once models exist.
-
-### 6. Start the backend
+6. Start the backend.
 
 ```bash
 npm run dev
 ```
 
-The API health check will be available at `http://localhost:3001/health`.
+The API will be available at `http://localhost:3001`, and the health check is `GET /health`.
 
-### 7. Install frontend dependencies
-
-Open a new terminal:
-
-```bash
-cd frontend
-npm install
-```
-
-### 8. Start the frontend
-
-```bash
-npm run dev
-```
-
-The frontend will run on the Vite default port, usually `http://localhost:5173`.
-
-## Environment files
-
-Backend: `backend/.env`
-
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5433/fitness_app?schema=public"
-PORT=3001
-```
-
-Frontend: `frontend/.env`
-
-```env
-VITE_API_URL=http://localhost:3001
-```
-
-## Available scripts
-
-### Backend
+### Backend scripts
 
 - `npm run dev`
 - `npm run build`
 - `npm run start`
+- `npm test`
 - `npm run prisma:generate`
 - `npm run prisma:migrate`
+- `npm run prisma:migrate:deploy`
+- `npm run prisma:migrate:status`
 - `npm run prisma:seed`
 
-### Frontend
+Use `npm run prisma:migrate` when you are actively creating a new migration during development.
 
-- `npm run dev`
-- `npm run build`
-- `npm run preview`
+### API endpoints
+
+- `GET /health`
+- `POST /members`
+- `GET /members?q=`
+- `GET /members/:id`
+- `GET /plans`
+- `POST /members/:id/memberships`
+- `POST /members/:id/memberships/:membershipId/cancel`
+- `POST /members/:id/check-ins`
+
+### Example request bodies
+
+Create member:
+
+```json
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com"
+}
+```
+
+Assign membership:
+
+```json
+{
+  "planId": "9f6ef6eb-8f4a-4f7c-b50c-090e7d93c9f1",
+  "startDate": "2026-03-25"
+}
+```
+
+Cancel membership:
+
+```json
+{
+  "effectiveDate": "2026-03-25"
+}
+```
+
+### Error response shape
+
+```json
+{
+  "error": {
+    "code": "ACTIVE_MEMBERSHIP_ALREADY_EXISTS",
+    "message": "Member already has an active membership."
+  }
+}
+```
+
+### Member summary shape
+
+`GET /members/:id` returns the member record plus:
+
+- current active membership and plan, if one exists
+- last check-in timestamp, if any
+- check-in count in the last 30 days
+
+## Frontend
+
+The frontend scaffold is still present in `frontend/`, but this step focuses only on backend domain, persistence, business rules, and API endpoints.

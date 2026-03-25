@@ -7,9 +7,74 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// TODO: Add application models when feature development starts.
-// Planned models:
-// - Member
-// - Plan
-// - Membership
-// - CheckIn
+enum BillingPeriod {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+
+  @@map("billing_period")
+}
+
+enum MembershipStatus {
+  ACTIVE
+  CANCELED
+
+  @@map("membership_status")
+}
+
+model Member {
+  id          String       @id @default(uuid()) @db.Uuid
+  firstName   String       @map("first_name")
+  lastName    String       @map("last_name")
+  email       String       @unique
+  memberships Membership[]
+  checkIns    CheckIn[]
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  @@index([lastName, firstName])
+  @@map("members")
+}
+
+model MembershipPlan {
+  id            String        @id @default(uuid()) @db.Uuid
+  name          String        @unique
+  description   String?
+  priceCents    Int           @map("price_cents")
+  billingPeriod BillingPeriod @map("billing_period")
+  isActive      Boolean       @default(true) @map("is_active")
+  memberships   Membership[]
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  @@index([isActive])
+  @@map("membership_plans")
+}
+
+model Membership {
+  id                        String           @id @default(uuid()) @db.Uuid
+  memberId                  String           @map("member_id") @db.Uuid
+  planId                    String           @map("plan_id") @db.Uuid
+  startDate                 DateTime         @map("start_date") @db.Date
+  status                    MembershipStatus @default(ACTIVE)
+  cancellationEffectiveDate DateTime?        @map("cancellation_effective_date") @db.Date
+  member                    Member           @relation(fields: [memberId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  plan                      MembershipPlan   @relation(fields: [planId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  createdAt                 DateTime         @default(now()) @map("created_at")
+  updatedAt                 DateTime         @updatedAt @map("updated_at")
+
+  @@index([memberId, status])
+  @@index([planId])
+  @@map("memberships")
+}
+
+model CheckIn {
+  id          String   @id @default(uuid()) @db.Uuid
+  memberId    String   @map("member_id") @db.Uuid
+  checkedInAt DateTime @default(now()) @map("checked_in_at")
+  member      Member   @relation(fields: [memberId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([memberId, checkedInAt])
+  @@map("check_ins")
+}
