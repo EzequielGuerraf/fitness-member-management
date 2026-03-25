@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// TODO: Add application models when feature development starts.
+// Planned models:
+// - Member
+// - Plan
+// - Membership
+// - CheckIn
