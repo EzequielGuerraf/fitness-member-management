@@ -498,6 +498,52 @@ img {
   font-size: 0.94rem;
 }
 
+.table-shell {
+  overflow-x: auto;
+  border: 1px solid rgba(20, 32, 51, 0.08);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.data-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.data-table th {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(20, 32, 51, 0.08);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.data-table__cell {
+  padding: 16px;
+  border-bottom: 1px solid rgba(20, 32, 51, 0.08);
+  vertical-align: top;
+}
+
+.data-table tbody tr:last-child .data-table__cell {
+  border-bottom: none;
+}
+
+.data-table__cell--strong {
+  font-weight: 600;
+}
+
+.data-table__cell--muted {
+  color: var(--text-secondary);
+}
+
+.data-table__cell--actions {
+  white-space: nowrap;
+}
+
 .search-input-group {
   display: flex;
   align-items: center;
@@ -632,6 +678,69 @@ img {
   gap: 12px;
 }
 
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.action-panel {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid rgba(20, 32, 51, 0.08);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.action-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.action-panel__title {
+  margin: 0 0 4px;
+  font-size: 1.02rem;
+  letter-spacing: -0.02em;
+}
+
+.action-panel__description {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.action-panel__details {
+  display: grid;
+  gap: 8px;
+}
+
+.action-panel__meta {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+}
+
+.action-form {
+  display: grid;
+  gap: 14px;
+}
+
+.action-form__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.action-form__note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.94rem;
+}
+
 .metric-card {
   padding: 16px;
   border-radius: 16px;
@@ -729,12 +838,14 @@ img {
 @media (max-width: 900px) {
   .page-header,
   .section__header,
-  .members-toolbar__row {
+  .members-toolbar__row,
+  .action-panel__header {
     flex-direction: column;
     align-items: stretch;
   }
 
   .summary-grid,
+  .action-grid,
   .quick-actions,
   .metric-grid,
   .form__grid {

@@ -48,6 +48,14 @@ export class MembershipsService {
     input: AssignMembershipBody
   ): Promise<MembershipDto> {
     const startDate = parseDateOnly(input.startDate);
+    const today = formatDateOnly(new Date());
+
+    if (input.startDate > today) {
+      throw new UnprocessableEntityError(
+        "Membership start date cannot be in the future.",
+        "INVALID_START_DATE"
+      );
+    }
 
     try {
       return await this.database.$transaction(

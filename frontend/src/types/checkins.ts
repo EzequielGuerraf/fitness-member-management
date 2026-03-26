@@ -1,11 +1,4 @@
-export interface CheckInDto {
-  id: string;
-  memberId: string;
-  checkedInAt: string;
-  createdAt: string;
-}
-
-export interface CheckInListItemDto {
+export interface CheckInListItem {
   checkedInAt: string;
   createdAt: string;
   id: string;

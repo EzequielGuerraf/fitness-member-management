@@ -1,61 +1,50 @@
-# fitness-member-management
+# Fitness Member Management
 
-Full-stack coding challenge workspace using React, Vite, Express, TypeScript, PostgreSQL, and Prisma.
+Full-stack app for managing gym members, memberships, and check-ins.
 
-## Backend foundation
+Tech stack:
+- Frontend: React + Vite
+- Backend: Express + TypeScript
+- Database: PostgreSQL + Prisma
 
-### Folder structure
+## Prerequisites
 
-```text
-backend/
-  prisma/
-    migrations/
-    schema.prisma
-    seed.ts
-  src/
-    app.ts
-    server.ts
-    config/
-    lib/
-    middleware/
-    modules/
-      members/
-      plans/
-      memberships/
-      checkins/
-```
+Before you start, make sure you have:
 
-### Backend features in this step
+- Node.js 20+ installed
+- npm installed
+- Docker Desktop (or Docker Engine + Docker Compose) running
+- These ports available locally: `5433`, `3001`, `5173`
 
-- Prisma schema with PostgreSQL tables for members, membership plans, memberships, and check-ins
-- Seed data for at least one active membership plan
-- Express + TypeScript API with Zod request validation
-- Thin controllers, service-layer business rules, and centralized error handling
-- Transaction-safe membership assignment with a DB-level partial unique index for active memberships
-- Minimal backend test covering the one-active-membership rule
+## Run Locally
 
-### Backend setup
+### 1. Start PostgreSQL with Docker
 
-1. Start PostgreSQL.
+From the project root, run:
 
 ```bash
 docker compose up -d
 ```
 
-2. Install backend dependencies.
+This starts PostgreSQL on `localhost:5433`.
+
+### 2. Install dependencies
+
+From the project root, run:
 
 ```bash
-cd backend
 npm install
+npm run install:all
 ```
 
-3. Create the backend environment file.
+This installs:
+- the root dependencies
+- backend dependencies
+- frontend dependencies
 
-```bash
-copy .env.example .env
-```
+### 3. Create the backend environment file
 
-If you are not on Windows, create `backend/.env` with:
+Create a file named `backend/.env` with this content:
 
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5433/fitness_app?schema=public"
@@ -63,110 +52,70 @@ PORT=3001
 NODE_ENV=development
 ```
 
-4. Generate Prisma client and apply the checked-in migration.
+No frontend `.env` file is required for local development. The frontend already defaults to `http://localhost:3001` for the API.
+
+### 4. Run migrations and seed the database
+
+Open a terminal in `backend/` and run:
 
 ```bash
+cd backend
 npm run prisma:generate
 npm run prisma:migrate:deploy
-```
-
-5. Seed the database.
-
-```bash
 npm run prisma:seed
 ```
 
-6. Start the backend.
+The seed creates sample data for local testing:
+- 10 members
+- 3 membership plans
+- 20 check-ins
+
+### 5. Start the backend
+
+In one terminal, run:
+
+```bash
+cd backend
+npm run dev
+```
+
+Backend URL:
+- API: `http://localhost:3001`
+- Health check: `http://localhost:3001/health`
+
+### 6. Start the frontend
+
+In a second terminal, run:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Frontend URL:
+- App: `http://localhost:5173`
+
+## Optional: Start both with one command
+
+After finishing the setup above, you can also run both apps from the project root:
 
 ```bash
 npm run dev
 ```
 
-The API will be available at `http://localhost:3001`, and the health check is `GET /health`.
+## Quick local check
 
-### Backend scripts
+If everything is working:
 
-- `npm run dev`
-- `npm run build`
-- `npm run start`
-- `npm test`
-- `npm run prisma:generate`
-- `npm run prisma:migrate`
-- `npm run prisma:migrate:deploy`
-- `npm run prisma:migrate:status`
-- `npm run prisma:seed`
+- `docker compose up -d` starts PostgreSQL without errors
+- `http://localhost:3001/health` returns a healthy response
+- `http://localhost:5173` loads the UI
 
-Use `npm run prisma:migrate` when you are actively creating a new migration during development.
 
-### Root scripts
+## Stop the local database
 
-- `npm run dev`
-- `npm run dev:backend`
-- `npm run dev:frontend`
-- `npm run build`
-- `npm run build:backend`
-- `npm run build:frontend`
+When you are done, you can stop PostgreSQL with:
 
-### API endpoints
-
-- `GET /health`
-- `POST /members`
-- `GET /members?q=`
-- `GET /members/:id`
-- `GET /plans`
-- `POST /plans`
-- `POST /members/:id/memberships`
-- `POST /members/:id/memberships/:membershipId/cancel`
-- `POST /members/:id/check-ins`
-
-### Example request bodies
-
-Create member:
-
-```json
-{
-  "firstName": "Jane",
-  "lastName": "Doe",
-  "email": "jane.doe@example.com"
-}
+```bash
+docker compose down
 ```
-
-Assign membership:
-
-```json
-{
-  "planId": "9f6ef6eb-8f4a-4f7c-b50c-090e7d93c9f1",
-  "startDate": "2026-03-25"
-}
-```
-
-Cancel membership:
-
-```json
-{
-  "effectiveDate": "2026-03-25"
-}
-```
-
-### Error response shape
-
-```json
-{
-  "error": {
-    "code": "ACTIVE_MEMBERSHIP_ALREADY_EXISTS",
-    "message": "Member already has an active membership."
-  }
-}
-```
-
-### Member summary shape
-
-`GET /members/:id` returns the member record plus:
-
-- current active membership and plan, if one exists
-- last check-in timestamp, if any
-- check-in count in the last 30 days
-
-## Frontend
-
-The frontend scaffold is still present in `frontend/`, but this step focuses only on backend domain, persistence, business rules, and API endpoints.

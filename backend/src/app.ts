@@ -38,7 +38,7 @@ app.get(
 
 app.use("/members", membersRoutes);
 app.use("/members", membershipsRoutes);
-app.use("/members", checkInsRoutes);
+app.use("/", checkInsRoutes);
 app.use("/plans", plansRoutes);
 
 app.use(notFoundHandler);

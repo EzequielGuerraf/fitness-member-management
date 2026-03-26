@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/layout/AppLayout";
 import { CreateMemberPage } from "./pages/CreateMemberPage";
+import { CheckInsPage } from "./pages/CheckInsPage";
 import { MembershipPlansPage } from "./pages/MembershipPlansPage";
 import { MemberSummaryPage } from "./pages/MemberSummaryPage";
 import { MembersListPage } from "./pages/MembersListPage";
@@ -15,6 +16,7 @@ function App() {
           <Route path="/members" element={<MembersListPage />} />
           <Route path="/members/new" element={<CreateMemberPage />} />
           <Route path="/members/:id" element={<MemberSummaryPage />} />
+          <Route path="/check-ins" element={<CheckInsPage />} />
           <Route path="/plans" element={<MembershipPlansPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

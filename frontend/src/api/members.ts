@@ -1,7 +1,11 @@
 import { apiRequest } from "./client";
 import type {
+  AssignMembershipInput,
+  CancelMembershipInput,
   CreateMemberInput,
+  MemberCheckIn,
   MemberListItem,
+  MembershipRecord,
   MemberSummary
 } from "../types/members";
 
@@ -33,5 +37,37 @@ export const createMember = async (
   return apiRequest<MemberListItem>("/members", {
     method: "POST",
     body: JSON.stringify(payload)
+  });
+};
+
+export const assignMembershipToMember = async (
+  memberId: string,
+  payload: AssignMembershipInput
+): Promise<MembershipRecord> => {
+  return apiRequest<MembershipRecord>(`/members/${memberId}/memberships`, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+};
+
+export const cancelMembershipForMember = async (
+  memberId: string,
+  membershipId: string,
+  payload: CancelMembershipInput
+): Promise<MembershipRecord> => {
+  return apiRequest<MembershipRecord>(
+    `/members/${memberId}/memberships/${membershipId}/cancel`,
+    {
+      method: "POST",
+      body: JSON.stringify(payload)
+    }
+  );
+};
+
+export const recordMemberCheckIn = async (
+  memberId: string
+): Promise<MemberCheckIn> => {
+  return apiRequest<MemberCheckIn>(`/members/${memberId}/check-ins`, {
+    method: "POST"
   });
 };

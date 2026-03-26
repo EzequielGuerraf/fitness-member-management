@@ -5,6 +5,12 @@ import { CheckInsService } from "./checkins.service";
 
 const checkInsService = new CheckInsService();
 
+export const listCheckIns: RequestHandler = asyncHandler(async (_request, response) => {
+  const checkIns = await checkInsService.listCheckIns();
+
+  response.status(200).json({ data: checkIns });
+});
+
 export const recordMemberCheckIn: RequestHandler = asyncHandler(async (request, response) => {
   const { id } = request.params as MemberCheckInParams;
   const checkIn = await checkInsService.recordMemberCheckIn(id);

@@ -30,6 +30,8 @@ model Member {
   age         Int?
   phoneNumber String?      @map("phone_number")
   address     String?
+  /// Historical memberships. The SQL migration enforces that only one of them
+  /// can be ACTIVE for the same member at any given time.
   memberships Membership[]
   checkIns    CheckIn[]
   createdAt   DateTime     @default(now()) @map("created_at")
@@ -59,6 +61,8 @@ model Membership {
   memberId                  String           @map("member_id") @db.Uuid
   planId                    String           @map("plan_id") @db.Uuid
   startDate                 DateTime         @map("start_date") @db.Date
+  /// ACTIVE is unique per member at the database level via a partial unique index
+  /// declared in the SQL migration.
   status                    MembershipStatus @default(ACTIVE)
   cancellationEffectiveDate DateTime?        @map("cancellation_effective_date") @db.Date
   member                    Member           @relation(fields: [memberId], references: [id], onDelete: Restrict, onUpdate: Cascade)
