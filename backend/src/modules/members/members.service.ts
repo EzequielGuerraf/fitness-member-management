@@ -19,6 +19,9 @@ export class MembersService {
           firstName: true,
           lastName: true,
           email: true,
+          age: true,
+          phoneNumber: true,
+          address: true,
           createdAt: true,
           updatedAt: true
         }
@@ -69,6 +72,9 @@ export class MembersService {
         firstName: true,
         lastName: true,
         email: true,
+        age: true,
+        phoneNumber: true,
+        address: true,
         createdAt: true,
         updatedAt: true
       }
@@ -86,6 +92,9 @@ export class MembersService {
           firstName: true,
           lastName: true,
           email: true,
+          age: true,
+          phoneNumber: true,
+          address: true,
           createdAt: true,
           updatedAt: true,
           memberships: {
@@ -145,6 +154,9 @@ export class MembersService {
       firstName: member.firstName,
       lastName: member.lastName,
       email: member.email,
+      age: member.age,
+      phoneNumber: member.phoneNumber,
+      address: member.address,
       createdAt: formatDateTime(member.createdAt),
       updatedAt: formatDateTime(member.updatedAt),
       activeMembership: activeMembership
@@ -176,6 +188,9 @@ const toMemberListItem = (member: {
   firstName: string;
   lastName: string;
   email: string;
+  age: number | null;
+  phoneNumber: string | null;
+  address: string | null;
   createdAt: Date;
   updatedAt: Date;
 }): MemberListItemDto => {
@@ -184,6 +199,9 @@ const toMemberListItem = (member: {
     firstName: member.firstName,
     lastName: member.lastName,
     email: member.email,
+    age: member.age,
+    phoneNumber: member.phoneNumber,
+    address: member.address,
     createdAt: formatDateTime(member.createdAt),
     updatedAt: formatDateTime(member.updatedAt)
   };

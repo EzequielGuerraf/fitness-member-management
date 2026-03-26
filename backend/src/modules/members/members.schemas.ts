@@ -9,7 +9,25 @@ export const createMemberBodySchema = z.object({
     .trim()
     .email("email must be a valid email address.")
     .max(255, "email must be at most 255 characters.")
-    .transform((value) => value.toLowerCase())
+    .transform((value) => value.toLowerCase()),
+  age: z
+    .number()
+    .int("age must be an integer.")
+    .min(0, "age must be at least 0.")
+    .max(120, "age must be at most 120.")
+    .optional(),
+  phoneNumber: z
+    .string()
+    .trim()
+    .max(30, "phoneNumber must be at most 30 characters.")
+    .optional()
+    .transform((value) => (value && value.length > 0 ? value : undefined)),
+  address: z
+    .string()
+    .trim()
+    .max(255, "address must be at most 255 characters.")
+    .optional()
+    .transform((value) => (value && value.length > 0 ? value : undefined))
 });
 
 export const listMembersQuerySchema = z.object({

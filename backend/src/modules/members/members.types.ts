@@ -5,6 +5,9 @@ export interface MemberListItemDto {
   firstName: string;
   lastName: string;
   email: string;
+  age: number | null;
+  phoneNumber: string | null;
+  address: string | null;
   createdAt: string;
   updatedAt: string;
 }

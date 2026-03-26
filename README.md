@@ -98,6 +98,15 @@ The API will be available at `http://localhost:3001`, and the health check is `G
 
 Use `npm run prisma:migrate` when you are actively creating a new migration during development.
 
+### Root scripts
+
+- `npm run dev`
+- `npm run dev:backend`
+- `npm run dev:frontend`
+- `npm run build`
+- `npm run build:backend`
+- `npm run build:frontend`
+
 ### API endpoints
 
 - `GET /health`
@@ -105,6 +114,7 @@ Use `npm run prisma:migrate` when you are actively creating a new migration duri
 - `GET /members?q=`
 - `GET /members/:id`
 - `GET /plans`
+- `POST /plans`
 - `POST /members/:id/memberships`
 - `POST /members/:id/memberships/:membershipId/cancel`
 - `POST /members/:id/check-ins`
