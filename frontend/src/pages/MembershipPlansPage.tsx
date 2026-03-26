@@ -219,8 +219,8 @@ export function MembershipPlansPage() {
           title="Create plan"
           description="Set up a new membership plan by providing the details and pricing."
         >
-          <Card>
-            <form className="form" noValidate onSubmit={handleSubmit}>
+          <Card className="plan-form-card">
+            <form className="form plan-form" noValidate onSubmit={handleSubmit}>
               <Field error={errors.name} htmlFor="plan-name" label="Plan name">
                 <Input
                   hasError={Boolean(errors.name)}

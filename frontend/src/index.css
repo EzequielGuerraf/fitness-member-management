@@ -423,6 +423,14 @@ img {
   gap: 20px;
 }
 
+.plan-form-card.card--padded {
+  padding-top: 10px;
+}
+
+.plan-form {
+  gap: 18px;
+}
+
 .form__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -610,6 +618,7 @@ img {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
+  align-items: start;
 }
 
 .summary-grid__full {
